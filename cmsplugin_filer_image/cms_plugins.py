@@ -44,7 +44,7 @@ class FilerImagePlugin(CMSPluginBase):
             )
         }),
         (None, {
-            'fields': ('alignment',)
+            'fields': ('alignment', 'popup_image')
         }),
         (_('More'), {
             'classes': ('collapse',),
