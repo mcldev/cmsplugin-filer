@@ -11,7 +11,7 @@ setup(
     long_description=open('README.rst').read(),
     author='Stefan Foulis',
     author_email='stefan.foulis@gmail.com',
-    packages=find_packages('src'),
+    packages=find_packages(),
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Framework :: Django',
