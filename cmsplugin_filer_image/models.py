@@ -87,6 +87,10 @@ class FilerImage(CMSPlugin):
     # additional LEFT OUTER JOINs.
     objects = FilerPluginManager(select_related=('image',))
 
+    # New Boolean field to select whether the image should popout on click using Magnific Popup
+    # Additional fields and custom options can be added in future...
+    popup_image = models.BooleanField(_("Popup original image on click (disables links)"), default=True)
+
     class Meta:
         verbose_name = _("filer image")
         verbose_name_plural = _("filer images")
