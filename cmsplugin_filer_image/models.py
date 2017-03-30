@@ -89,7 +89,7 @@ class FilerImage(CMSPlugin):
 
     # New Boolean field to select whether the image should popout on click using Magnific Popup
     # Additional fields and custom options can be added in future...
-    popup_image = models.BooleanField(_("Popup original image on click (disables links)"), default=True)
+    popup_image = models.BooleanField(_("Popup original image on click (will not work with links)"), default=False)
 
     class Meta:
         verbose_name = _("filer image")

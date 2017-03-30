@@ -1,4 +1,4 @@
-{% load thumbnail filer_tags filer_image_tags %}
+{% load thumbnail filer_tags filer_image_tags staticfiles sekizai_tags %}
 {% comment %}
     Added the image alignment to the caption class too
 
@@ -14,31 +14,39 @@
 	{% if link %}<a href="{{ link }}"{% if instance.target_blank %} target="_blank"{% endif %} {{ instance.link_attributes_str }}>{% endif %}<img{% if instance.alignment %} class="{{ instance.alignment }}"{% endif %} alt="{% if instance.alt %}{{ instance.alt }}{% endif %}" src="{{ thumbnail.url }}"{% if instance.caption %} title="{{ instance.caption }}"{% endif %} />{% if link %}</a>{% endif %}
 {% endcomment %}
 
-{% if instance.popup_image %}
-    {% addtoblock "js" %}<script src="{% static 'cmsplugin_filer_image/ext-plugins/magnific-popup/1.1.0/js/magnific-popup.min.js' %}"></script>{% endaddtoblock %}
-    {% addtoblock "css" %}<link rel="stylesheet" href="{% static 'cmsplugin_filer_image/ext-plugins/magnific-popup/1.1.0/css/magnific-popup.min.css' %}"/>{% endaddtoblock %}
+{% addtoblock "js" %}
+    {% if instance.popup_image and not link %}
+        <script src="{% static 'cmsplugin_filer_image/ext-plugins/magnific-popup/1.1.0/js/magnific-popup.min.js' %}"></script>
+    {% endif %}
+{% endaddtoblock %}
 
+{% addtoblock "css" %}
+    {% if instance.popup_image and not link %}
+        <link rel="stylesheet" href="{% static 'cmsplugin_filer_image/ext-plugins/magnific-popup/1.1.0/css/magnific-popup.min.css' %}"/>
+    {% endif %}
+{% endaddtoblock %}
 
-    {% addtoblock "js" %}
-        {% if not request.toolbar.edit_mode %}
-            <script>
-                $(document).ready(function () {
-                    $('#mfp-image-{{ instance.id }}').magnificPopup(
-                        {
-                            items: {
-                                src: '{{ instance.file.url }}'
-                            },
-                            type: 'image'});
-                });
-            </script>
-        {% endif %}
-    {% endaddtoblock %}
-{% endif %}
+{% addtoblock "js" %}
+    {% if not request.toolbar.edit_mode and instance.popup_image and not link %}
+        <script>
+            $(document).ready(function () {
+                $('#mfp-image-{{ instance.id }}').magnificPopup(
+                    {
+                        items: {
+                            src: '{{ instance.image.url }}'
+                        },
+                        type: 'image'});
+            });
+        </script>
+    {% endif %}
+{% endaddtoblock %}
 
 {% spaceless %}
     <figure class="figure">
+        {# -- Link -- #}
         {% if link %}<a href="{{ link }}"{% if instance.target_blank %} target="_blank"{% endif %} class="filer_image_link" {{ instance.link_attributes_str }}>{% endif %}
 
+        {# -- Image -- #}
         {% if instance.image %}
             {% if instance.use_original_image %}
                 <img id="mfp-image-{{ instance.id }}"
@@ -50,7 +58,8 @@
                     {% if instance.caption %}title="{{ instance.caption }}"{% endif %} />
             {% else %}
                 {% thumbnail instance.image size crop=opts.crop upscale=opts.upscale subject_location=opts.subject_location as thumbnail %}
-                <img class="filer_image {% if instance.alignment %}block-{{ instance.alignment }}{% endif %}{% if instance.use_autoscale %} img-responsive{% endif %}"
+                <img id="mfp-image-{{ instance.id }}"
+                     class="filer_image {% if instance.alignment %}block-{{ instance.alignment }}{% endif %}{% if instance.use_autoscale %} img-responsive{% endif %}"
                      alt="{% if instance.alt %}{{ instance.alt }}{% endif %}"
                      src="{{ thumbnail.url }}"
                     {% if instance.width %}width="{{ instance.width }}"{% endif %}
@@ -59,13 +68,17 @@
             {% endif %}
         {% else %}
             {# just a plain link to some external image #}
-            <img class="filer_image {% if instance.alignment %}block-{{ instance.alignment }}{% endif %}{% if instance.use_autoscale %} img-responsive{% endif %}"
+            <img id="mfp-image-{{ instance.id }}"
+                 class="filer_image {% if instance.alignment %}block-{{ instance.alignment }}{% endif %}{% if instance.use_autoscale %} img-responsive{% endif %}"
                  alt="{% if instance.alt %}{{ instance.alt }}{% endif %}"
                  src="{{ instance.image_url }}"
                 {% if size.0 %}width="{{ size.0 }}"{% endif %}
                 {% if size.1 %}height="{{ size.1 }}"{% endif %}
                 {% if instance.caption %}title="{{ instance.caption }}"{% endif %} />
         {% endif %}
+        {% if link %}</a>{% endif %}
+
+        {# -- Caption -- #}
         {% if instance.caption or instance.description %}
             {#  removed classes: filer_image_info#}
             <figcaption class="figure-caption {% if instance.alignment %}block-{{ instance.alignment }}{% endif %}"
@@ -74,6 +87,6 @@
                 {% if instance.description %}<span class="desc">{{ instance.description|linebreaks }}</span>{% endif %}
             </figcaption>
         {% endif %}
-        {% if link %}</a>{% endif %}
+
     </figure>
 {% endspaceless %}
