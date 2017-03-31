@@ -14,6 +14,16 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='filerimage',
             name='popup_image',
-            field=models.BooleanField(default=True, verbose_name='Popup original image on click (disables links)'),
+            field=models.BooleanField(default=True, verbose_name='Popup original image on click (cannot be used with links)'),
+        ),
+        migrations.AlterField(
+            model_name='filerimage',
+            name='caption_text',
+            field=models.CharField(max_length=255, null=True, verbose_name='Caption Title', blank=True),
+        ),
+        migrations.AlterField(
+            model_name='filerimage',
+            name='description',
+            field=models.TextField(null=True, verbose_name='Caption Text', blank=True),
         ),
     ]

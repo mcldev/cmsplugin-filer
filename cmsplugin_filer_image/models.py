@@ -32,7 +32,8 @@ class FilerImage(CMSPlugin):
 
     style = models.CharField(
         _('Style'), choices=STYLE_CHOICES, default=DEFAULT_STYLE, max_length=50, blank=True)
-    caption_text = models.CharField(_("caption text"), null=True, blank=True, max_length=255)
+    caption_text = models.CharField(_("Caption Title"), null=True, blank=True, max_length=255)
+    description = models.TextField(_("Caption Text"), blank=True, null=True)
     image = FilerImageField(
         null=True,
         blank=True,
@@ -72,7 +73,6 @@ class FilerImage(CMSPlugin):
     )
     original_link = models.BooleanField(_("link original image"), default=False,
                                         help_text=_("if present image will be clickable"))
-    description = models.TextField(_("description"), blank=True, null=True)
     target_blank = models.BooleanField(_('Open link in new window'), default=False)
     link_attributes = AttributesField(excluded_keys=EXCLUDED_KEYS, blank=True,
                                       help_text=_('Optional. Adds HTML attributes to the rendered link.'))
@@ -89,7 +89,7 @@ class FilerImage(CMSPlugin):
 
     # New Boolean field to select whether the image should popout on click using Magnific Popup
     # Additional fields and custom options can be added in future...
-    popup_image = models.BooleanField(_("Popup original image on click (will not work with links)"), default=False)
+    popup_image = models.BooleanField(_("Popup original image on click (cannot be used with links)"), default=False)
 
     class Meta:
         verbose_name = _("filer image")

@@ -29,6 +29,7 @@ class FilerImagePlugin(CMSPluginBase):
         (None, {
             'fields': [
                 'caption_text',
+                'description',
                 'image',
                 'image_url',
                 'alt_text',
@@ -54,7 +55,7 @@ class FilerImagePlugin(CMSPluginBase):
                 'file_link',
                 ('original_link', 'target_blank',),
                 'link_attributes',
-                'description',
+
             ),
         }),
     )
