@@ -83,8 +83,8 @@
             {#  removed classes: filer_image_info#}
             <figcaption class="figure-caption {% if instance.alignment %}block-{{ instance.alignment }}{% endif %}"
                         {% if instance.width %}style="max-width:{{ instance.width }}px" {% endif %}>
-                {% if instance.caption %}<span class="title {% if instance.description %}title_and_desc{% endif %}">{{ instance.caption }}</span>{% endif %}
-                {% if instance.description %}<span class="desc">{{ instance.description|linebreaks }}</span>{% endif %}
+                {% if instance.caption %}<p class="title {% if instance.description %}title_and_desc{% endif %}">{{ instance.caption }}</p>{% endif %}
+                {% if instance.description %}<p class="desc">{{ instance.description|linebreaks }}</p>{% endif %}
             </figcaption>
         {% endif %}
 
